@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>加载中...</title>
+<style>
+  body{
+    margin:0;
+    padding:0;
+    background:#000;
+    color:#fff;
+    text-align:center;
+  }
+  #ghost{
+    max-width:100%;
+    height:auto;
+    display:none; /* 先隐藏 */
+  }
+</style>
+</head>
+<body>
+
+<h1>加载中，请稍候...</h1>
+
+<!-- 鬼图（我直接用在线图，不用你上传） -->
+<img id="ghost" src="https://cdn.pixabay.com/photo/2017/09/11/14/44/ghost-2738146_1280.png">
+
+<!-- 音频元素（放页面里，让用户可以点） -->
+<audio id="scaryAudio" src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0c6b1bccb.mp3">
+
+<script>
+// 页面抖动
+setInterval(function(){
+    document.body.style.transform = "translate("+(Math.random()*10-5)+"px,"+(Math.random()*10-5)+"px)";
+}, 50);
+
+// 3秒后：显示鬼图 + 播放声音 + 弹窗
+setTimeout(function(){
+    // 显示鬼图
+    document.getElementById("ghost").style.display = "block";
+
+    // 播放声音（必须在页面里放个，而且尽量在点击后才稳）
+    let a=document.getElementById("scaryAudio");
+    a.volume=1;
+    a.play().catch(e=>console.log("自动播放被拦截，需要用户点击"));
+
+    // 无限弹窗
+    function pop(){
+        alert("⚠ 系统错误！");
+        alert("⚠ 不要关闭！");
+    }
+    pop();
+
+}, 3000);
+</script>
+
+<!-- 右下角关闭 -->
+<button onclick="location.reload()" style="position:fixed;bottom:10px;right:10px;padding:8px;">关闭</button>
+
+</body>
+</html>
