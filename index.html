@@ -5,52 +5,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>加载中...</title>
 <style>
-  body{
-    margin:0;
-    padding:0;
-    background:#000;
-    color:#fff;
-    text-align:center;
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    font-family: sans-serif;
   }
-  #ghost{
-    width:100vw;
-    height:100vh;
-    object-fit:cover;
-    display:none;
-    position:fixed;
-    top:0;
-    left:0;
+  #ghost {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+  }
+  #tip {
+    margin-top: 40vh;
+    font-size: 24px;
   }
 </style>
 </head>
 <body>
-<h1 style="margin-top:40vh;">加载中，请稍候...</h1>
+<h1 id="tip">正在加载资源...
+老家在哪里自作</h1>
 
+<!-- 稳定在线鬼脸图片 -->
 <img id="ghost" src="https://p3-hippo-sign.byteimg.com/tos-cn-i-a9yeduch1e/749376117f8f4704a373f74797f7501~tplv-ii0cwwkcx9-resize-crop-v1:0:0:1280:720.jpeg">
 
-<audio id="scaryAudio" src="https://cdn.pixabay.com/download/audio/2022/01/18/audio-d0f8f8bcaa.mp3?filename=scream-129642.mp3">
+<!-- 稳定在线尖叫音频 -->
+<audio id="scaryAudio" preload="auto">
+  <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio-d0f8f8bcaa.mp3?filename=scream-129642.mp3" type="audio/mpeg">
+
 
 <script>
-// 页面抖动
-setInterval(function(){
-    document.body.style.transform = "translate("+(Math.random()*6-3)+"px,"+(Math.random()*6-3)+"px)";
-}, 50);
+let count = 3;
+const tipEl = document.getElementById('tip');
 
-// 点击后才触发（解决浏览器禁止自动播放）
-document.body.addEventListener('click', function(){
-    setTimeout(function(){
-        document.getElementById("ghost").style.display = "block";
-        let a = document.getElementById("scaryAudio");
-        a.volume = 1;
-        a.play().catch(err=>{});
+// 倒计时
+const timer = setInterval(() => {
+  count--;
+  tipEl.innerText = `剩余 ${count} 秒...`;
+  if (count <= 0) {
+    clearInterval(timer);
+    // 显示鬼脸
+    document.getElementById("ghost").style.display = "block";
+    // 播放尖叫（用户点击后才生效，绕过浏览器限制）
+    document.getElementById("scaryAudio").volume = 1;
+    document.getElementById("scaryAudio").play().catch(err => {});
+  }
+}, 1000);
 
-        // 弹窗整蛊
-        alert("⚠ 系统错误！");
-        alert("⚠ 不要关闭！");
-    }, 2000);
+// 必须点一下屏幕，才能触发全屏+声音
+document.body.addEventListener('click', () => {
+  document.documentElement.requestFullscreen();
 });
 </script>
-
-<button onclick="window.close()" style="position:fixed;bottom:10px;right:10px;padding:8px;">关闭</button>
 </body>
 </html>
